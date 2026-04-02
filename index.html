@@ -4,43 +4,116 @@
     <title>CRUD Data Pasien</title>
     <style>
       body {
-        font-family: Arial;
-        margin: 40px;
+        font-family: "Segoe UI", sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 0;
       }
+
+      .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+      }
+
+      .form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
       input {
-        margin: 5px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        flex: 1;
       }
-      table,
-      th,
-      td {
-        border: 1px solid black;
+
+      button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .btn-tambah {
+        background: #27ae60;
+        color: white;
+      }
+
+      .btn-edit {
+        background: #2980b9;
+        color: white;
+      }
+
+      .btn-hapus {
+        background: #e74c3c;
+        color: white;
+      }
+
+      table {
+        width: 100%;
         border-collapse: collapse;
-        padding: 8px;
+        margin-top: 10px;
+      }
+
+      th {
+        background: #2c3e50;
+        color: white;
+        padding: 10px;
+      }
+
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+      }
+
+      tr:hover {
+        background: #f1f1f1;
+      }
+
+      .title {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #555;
       }
     </style>
   </head>
+
   <body>
-    <h1>TEST AUTO DEPLOY</h1>
-    <h2>CRUD Data Pasien</h2>
+    <div class="container">
+      <h1>🩺 CRUD Data Pasien</h1>
+      <p class="title">Sistem Manajemen Data Pasien Sederhana</p>
 
-    <input type="text" id="nama" placeholder="Nama" />
-    <input type="number" id="umur" placeholder="Umur" />
-    <input type="text" id="diagnosa" placeholder="Diagnosa" />
-    <button onclick="tambahData()">Tambah</button>
+      <div class="form">
+        <input type="text" id="nama" placeholder="Nama" />
+        <input type="number" id="umur" placeholder="Umur" />
+        <input type="text" id="diagnosa" placeholder="Diagnosa" />
+        <button class="btn-tambah" onclick="tambahData()">Tambah</button>
+      </div>
 
-    <br /><br />
-
-    <table>
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Umur</th>
-          <th>Diagnosa</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="tabelData"></tbody>
-    </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Umur</th>
+            <th>Diagnosa</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelData"></tbody>
+      </table>
+    </div>
 
     <script>
       let dataPasien = JSON.parse(localStorage.getItem("pasien")) || [];
@@ -51,15 +124,15 @@
 
         dataPasien.forEach((p, index) => {
           tabel.innerHTML += `
-        <tr>
-            <td>${p.nama}</td>
-            <td>${p.umur}</td>
-            <td>${p.diagnosa}</td>
-            <td>
-                <button onclick="editData(${index})">Edit</button>
-                <button onclick="hapusData(${index})">Hapus</button>
-            </td>
-        </tr>`;
+    <tr>
+      <td>${p.nama}</td>
+      <td>${p.umur}</td>
+      <td>${p.diagnosa}</td>
+      <td>
+        <button class="btn-edit" onclick="editData(${index})">Edit</button>
+        <button class="btn-hapus" onclick="hapusData(${index})">Hapus</button>
+      </td>
+    </tr>`;
         });
 
         localStorage.setItem("pasien", JSON.stringify(dataPasien));
@@ -69,6 +142,11 @@
         let nama = document.getElementById("nama").value;
         let umur = document.getElementById("umur").value;
         let diagnosa = document.getElementById("diagnosa").value;
+
+        if (!nama || !umur || !diagnosa) {
+          alert("Semua field harus diisi!");
+          return;
+        }
 
         dataPasien.push({ nama, umur, diagnosa });
         render();
