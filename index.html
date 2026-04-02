@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD Data Pasien</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        input { margin: 5px; }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>CRUD Data Pasien</h2>
+
+<input type="text" id="nama" placeholder="Nama">
+<input type="number" id="umur" placeholder="Umur">
+<input type="text" id="diagnosa" placeholder="Diagnosa">
+<button onclick="tambahData()">Tambah</button>
+
+<br><br>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nama</th>
+            <th>Umur</th>
+            <th>Diagnosa</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody id="tabelData"></tbody>
+</table>
+
+<script>
+let dataPasien = JSON.parse(localStorage.getItem("pasien")) || [];
+
+function render() {
+    let tabel = document.getElementById("tabelData");
+    tabel.innerHTML = "";
+
+    dataPasien.forEach((p, index) => {
+        tabel.innerHTML += `
+        <tr>
+            <td>${p.nama}</td>
+            <td>${p.umur}</td>
+            <td>${p.diagnosa}</td>
+            <td>
+                <button onclick="editData(${index})">Edit</button>
+                <button onclick="hapusData(${index})">Hapus</button>
+            </td>
+        </tr>`;
+    });
+
+    localStorage.setItem("pasien", JSON.stringify(dataPasien));
+}
+
+function tambahData() {
+    let nama = document.getElementById("nama").value;
+    let umur = document.getElementById("umur").value;
+    let diagnosa = document.getElementById("diagnosa").value;
+
+    dataPasien.push({ nama, umur, diagnosa });
+    render();
+}
+
+function hapusData(index) {
+    dataPasien.splice(index, 1);
+    render();
+}
+
+function editData(index) {
+    let p = dataPasien[index];
+    document.getElementById("nama").value = p.nama;
+    document.getElementById("umur").value = p.umur;
+    document.getElementById("diagnosa").value = p.diagnosa;
+
+    hapusData(index);
+}
+
+render();
+</script>
+
+</body>
+</html>
